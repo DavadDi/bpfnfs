@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "bpf_utils.h": "c",
+        "validate_protocol.h": "c"
+    }
+}

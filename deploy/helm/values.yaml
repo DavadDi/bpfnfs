@@ -1,0 +1,93 @@
+# Default values for bpfnfs.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+workload:
+  type: deployment # 可选值: deployment 或 daemonset
+
+image:
+  repository: ghostbaby/bpfnfs
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "v0.0.1-amd64"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext:
+  privileged: true
+  capabilities:
+    add:
+      - SYS_ADMIN
+      - NET_ADMIN
+      - SYS_RESOURCE
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 8080
+
+resources:
+  limits:
+    cpu: 1
+    memory: 2Gi
+  requests:
+    cpu: 500m
+    memory: 1Gi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity:
+  {}
+  # nodeAffinity:
+  # requiredDuringSchedulingIgnoredDuringExecution:
+  #   nodeSelectorTerms:
+  #   - matchExpressions:
+  #     - key: custom-node-label-key
+  #       operator: In
+  #       values:
+  #       - custom-node-label-value
+
+serviceMonitor:
+  enabled: false
+
+nfsTraceConfig:
+  filter:
+    func: "^(vfs_|nfs_).*"
+    struct: "kiocb"
+
+  probing:
+    all_kmods: true
+    skip_attach: false
+    add_funcs: "nfs_file_direct_read:1,nfs_file_direct_write:1,nfs_swap_rw:1,nfs_file_read:1,nfs_file_write:1"
+
+  features:
+    debug: true
+    dns: true
+    nfs_metrics: true
+
+  output:
+    type: file
