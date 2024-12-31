@@ -1,0 +1,12 @@
+.idea
+e2e
+e2e.tar
+bpfnfs
+nfstrace_x86_bpfel.go
+nfstrace_x86_bpfel.o
+nfstrace_arm64_bpfel.go
+nfstrace_arm64_bpfel.o
+
+bpfnfs-linux-arm64
+bpfnfs-linux-amd64
+.vscode

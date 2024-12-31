@@ -1,0 +1,24 @@
+pprof:
+  enable: true
+
+filter:
+  func: "^(vfs_|nfs_).*"
+  struct: "kiocb"
+
+probing:
+  all_kmods: true
+  skip_attach: false
+  add_funcs: "nfs_file_direct_read:1,nfs_file_direct_write:1,nfs_swap_rw:1,nfs_file_read:1,nfs_file_write:1"
+
+features:
+  debug: false
+  nfs_metrics: true
+  nfs_tracer: true
+
+output:
+  type: file
+  file:
+    path: "./log"
+  otel:
+    enable: true
+    endpoint: "localhost:4317"
