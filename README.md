@@ -50,13 +50,23 @@ bpfnfs 使用 eBPF 技术监控和分析 NFS（网络文件系统）操作。它
 
 ### 阿里云 OS 专门启动方式
 
-在阿里云 OS 上启动监控时，可以使用 `--kernel-btf` 参数指定 BTF 文件。以下是具体的启动命令示例：
+在阿里云 OS 上启动监控时，需要指定 BTF 文件，因为阿里云 Linux 的 BTF 文件可能不在默认位置。此外，由于 NFS 相关的 `rpc_task` 结构定义在内核模块中而不是主内核 vmlinux 中，我们还需要指定内核模块 BTF 文件的目录。
 
-```
-./bpfnfs --kernel-btf=./deploy/btf/linux-5.10.134-16.3.al8-vmlinux.btf
+以下是具体的启动命令示例：
+
+```bash
+# 使用配置文件指定 BTF 文件
+./bpfnfs --config-path=/path/to/config.yaml
 ```
 
-请确保 `linux-5.10.134-16.3.al8-vmlinux.btf` 文件位于 `./deploy/btf/` 目录下。
+配置文件示例 (config.yaml):
+```yaml
+btf:
+  kernel: "/path/to/btf/linux-5.10.134-16.3.al8-vmlinux.btf"
+  model_dir: "/path/to/btf"  # 可选，默认为 /sys/kernel/btf
+
+# 其他配置项...
+```
 
 ## 配置
 
